@@ -46,27 +46,24 @@ export default function MainScreen({ navigation }) {
   // console.log(url);
 
   const getAlbumInfo = async () => {
+    let albumData = [];
     const response = await fetch(url);
     const json = await response.json();
-    // console.log(json);
+
     json.topalbums.album.forEach((doc) => {
-      // console.log(doc);
-      console.log(doc.name);
-      console.log(doc.playcount);
-      // albums.push({
-      //   albumName: doc.name,
-      //   key: doc.mbid,
-      // });
+      // console.log(doc.mbid);
+      let album = { albumName: doc.name, key: doc.mbid };
       doc.image.forEach((doc2) => {
-        doc2.size == "large"
-          ? console.log(doc2["#text"])
-          : // albums.push({
-            //     imageURL: doc["#text"],
-            //   })
-            null;
+        if (doc2.size === "large") {
+          // console.log(doc2["#text"]);
+          album = { ...album, imageURL: doc2["#text"] };
+          // break;
+        }
       });
-      // console.log(albums);
+      albumData.push(album);
     });
+    // console.log(albumData);
+    setAlbums(albumData);
   };
 
   return (
