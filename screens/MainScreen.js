@@ -7,6 +7,7 @@ import {
   SafeAreaView,
   FlatList,
   TouchableOpacity,
+  Image,
 } from "react-native";
 import { api_key, shared_secret_key } from "../assets/api_key";
 
@@ -47,11 +48,25 @@ export default function MainScreen({ navigation }) {
   const getAlbumInfo = async () => {
     const response = await fetch(url);
     const json = await response.json();
-    // json.forEach((doc) => {
-    //   console.log(doc.data().name);
-    // });
     // console.log(json);
-    // const data = response.data
+    json.topalbums.album.forEach((doc) => {
+      // console.log(doc);
+      console.log(doc.name);
+      console.log(doc.playcount);
+      // albums.push({
+      //   albumName: doc.name,
+      //   key: doc.mbid,
+      // });
+      doc.image.forEach((doc2) => {
+        doc2.size == "large"
+          ? console.log(doc2["#text"])
+          : // albums.push({
+            //     imageURL: doc["#text"],
+            //   })
+            null;
+      });
+      // console.log(albums);
+    });
   };
 
   return (
@@ -67,6 +82,10 @@ export default function MainScreen({ navigation }) {
           numColumns={2}
           renderItem={({ item }) => (
             <View style={styles.listItem}>
+              <Image
+                source={require("../assets/arse.jpeg")}
+                style={styles.albumCover}
+              />
               <TouchableOpacity
                 onPress={() => {
                   getAlbumInfo();
@@ -84,17 +103,21 @@ export default function MainScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
+  albumCover: {
+    height: "90%",
+    width: "90%",
+  },
   container: {
     flex: 1,
   },
   listItem: {
     height: 180,
     width: "45%",
-    margin: 5,
+    margin: 10,
     borderRadius: 5,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#515151",
+    // backgroundColor: "#515151",
   },
   listView: {
     height: "95%",

@@ -15,9 +15,9 @@ export default function Navigation() {
             // gestureEnabled: false
           }
         }
-        initialRouteName="Intro"
+        initialRouteName="Album List"
       >
-        <Stack.Screen name="Intro" component={MainScreen} />
+        <Stack.Screen name="Album List" component={MainScreen} />
         <Stack.Screen name="Album" component={AlbumScreen} />
       </Stack.Navigator>
     </NavigationContainer>
