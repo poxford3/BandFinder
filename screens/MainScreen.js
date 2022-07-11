@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -35,16 +35,18 @@ export default function MainScreen({ navigation }) {
       id: 5,
     },
   ];
+  var keyCount = -1;
 
   // const api_key = api_key;
   const rootURL = "http://ws.audioscrobbler.com/";
   const url =
-    "https://ws.audioscrobbler.com/2.0/?method=artist.gettopalbums&artist=dancegavindance&api_key=" +
+    "https://ws.audioscrobbler.com/2.0/?method=artist.gettopalbums&artist=dance+gavin+dance&api_key=" +
     api_key +
     "&format=json";
 
   // console.log(url);
 
+  // help from lucktale#2736 in rn discord :)
   const getAlbumInfo = async () => {
     let albumData = [];
     const response = await fetch(url);
@@ -52,7 +54,11 @@ export default function MainScreen({ navigation }) {
 
     json.topalbums.album.forEach((doc) => {
       // console.log(doc.mbid);
-      let album = { albumName: doc.name, key: doc.mbid };
+      let album = {
+        albumName: doc.name,
+        key: (keyCount += 1),
+        playCount: doc.playcount,
+      };
       doc.image.forEach((doc2) => {
         if (doc2.size === "large") {
           // console.log(doc2["#text"]);
@@ -66,31 +72,43 @@ export default function MainScreen({ navigation }) {
     setAlbums(albumData);
   };
 
+  useEffect(() => {
+    getAlbumInfo();
+  }, []);
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.topView}>
-        {/* <Text>Open up App.js to start working on your app!</Text> */}
         <StatusBar style="auto" />
       </View>
       <View style={styles.listView}>
         {/* <Text>test</Text> */}
         <FlatList
-          data={testList}
+          data={albums}
           numColumns={2}
           renderItem={({ item }) => (
-            <View style={styles.listItem}>
-              <Image
-                source={require("../assets/arse.jpeg")}
-                style={styles.albumCover}
-              />
+            <View style={styles.albumItem}>
               <TouchableOpacity
                 onPress={() => {
-                  getAlbumInfo();
+                  navigation.navigate("Album", {
+                    albumName: item.albumName,
+                  });
                 }}
               >
-                <Text>{item.name}</Text>
+                <Image
+                  source={{
+                    uri: item.imageURL
+                      ? item.imageURL
+                      : item.imageURL != ""
+                      ? item.imageURL
+                      : "https://picsum.photos/200",
+                  }}
+                  style={styles.albumImg}
+                />
+                <Text style={{ paddingTop: 10, textAlign: "center" }}>
+                  {item.albumName}
+                </Text>
               </TouchableOpacity>
-              <Text>Album Name</Text>
             </View>
           )}
         />
@@ -100,24 +118,23 @@ export default function MainScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-  albumCover: {
-    height: "90%",
-    width: "90%",
+  albumImg: {
+    height: 150,
+    width: 150,
+  },
+  albumItem: {
+    height: 200,
+    width: "43%",
+    margin: 10,
+    justifyContent: "center",
+    alignItems: "center",
   },
   container: {
     flex: 1,
-  },
-  listItem: {
-    height: 180,
-    width: "45%",
-    margin: 10,
-    borderRadius: 5,
-    justifyContent: "center",
-    alignItems: "center",
-    // backgroundColor: "#515151",
+    backgroundColor: "#aad3e6",
   },
   listView: {
-    height: "95%",
+    height: "100%",
     width: "100%",
     // justifyContent: "space-between",
     alignItems: "space-between",
