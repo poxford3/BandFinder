@@ -1,11 +1,21 @@
-import React from "react";
-import { View, Text } from "react-native";
+import React, { useEffect, useState } from "react";
+import {
+  View,
+  Text,
+  FlatList,
+  StyleSheet,
+  SafeAreaView,
+  Image,
+} from "react-native";
 import { api_key, shared_secret_key } from "../assets/api_key";
 
 export default function AlbumScreen({ navigation, route }) {
   const albumInfo = route.params;
   const albumName = JSON.stringify(albumInfo.albumName).replace(/\"/g, "");
+  const albumImage = JSON.stringify(albumInfo.imageURL).replace(/\"/g, "");
   const albumNameURL = albumName.replace(/ /g, "+");
+
+  const [songsData, setSongsData] = useState([]);
 
   const url =
     "http://ws.audioscrobbler.com//2.0/?method=album.getinfo&api_key=" +
@@ -16,10 +26,104 @@ export default function AlbumScreen({ navigation, route }) {
 
   // console.log(url);
 
+  const getSongInfo = async () => {
+    let songData = [];
+    const response = await fetch(url);
+    const json = await response.json();
+
+    console.log(json?.album?.tracks?.track);
+
+    json?.album?.tracks?.track?.forEach((doc) => {
+      // console.log(doc["@attr"]);
+      let song = {
+        songName: doc.name,
+        duration: doc.duration,
+        minutes: Math.floor(doc.duration / 60),
+        seconds: doc.duration - Math.floor(doc.duration / 60) * 60,
+        rank: doc["@attr"].rank,
+      };
+      // doc["@attr"].forEach((doc2) => {
+      //   song = { ...song, rank: doc2.rank };
+      // });
+      // console.log(song);
+      songData.push(song);
+    });
+
+    setSongsData(songData);
+    // console.log(songsData);
+  };
+
+  useEffect(() => {
+    getSongInfo();
+    // console.log(songsData);
+    // console.log("ran useeffect");
+  }, []);
+
   return (
-    <View>
-      <Text>AlbumScreen</Text>
-      <Text>{albumName}</Text>
-    </View>
+    <SafeAreaView style={styles.container}>
+      <View style={styles.albumHeader}>
+        <Image
+          source={{
+            uri: albumImage
+              ? albumImage
+              : albumImage != ""
+              ? albumImage
+              : "https://picsum.photos/200",
+          }}
+          style={styles.albumImg}
+        />
+        <Text style={styles.headerText}>{albumName}</Text>
+      </View>
+      <View style={styles.songList}>
+        <FlatList
+          data={songsData}
+          renderItem={({ item }) => (
+            <View style={styles.songItem}>
+              <View style={styles.leftSide}>
+                <Text numberOfLines={1}>
+                  {item.rank}. {item.songName}
+                </Text>
+              </View>
+              <View style={styles.rightSide}>
+                <Text>
+                  {item.minutes}:{item.seconds}
+                </Text>
+              </View>
+            </View>
+          )}
+        />
+      </View>
+    </SafeAreaView>
   );
 }
+
+const styles = StyleSheet.create({
+  albumHeader: {
+    flex: 3,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  albumImg: {
+    height: 150,
+    width: 150,
+  },
+  container: {
+    flex: 1,
+  },
+  headerText: {
+    fontWeight: "bold",
+  },
+  leftSide: {
+    flexDirection: "row",
+  },
+  rightSide: {},
+  songItem: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    paddingHorizontal: 10,
+  },
+  songList: {
+    // alignItems: "center",
+    flex: 7,
+  },
+});

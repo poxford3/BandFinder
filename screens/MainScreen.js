@@ -92,6 +92,7 @@ export default function MainScreen({ navigation }) {
                 onPress={() => {
                   navigation.navigate("Album", {
                     albumName: item.albumName,
+                    imageURL: item.imageURL,
                   });
                 }}
               >
