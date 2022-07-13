@@ -16,6 +16,7 @@ export default function AlbumScreen({ navigation, route }) {
   const albumNameURL = albumName.replace(/ /g, "+");
 
   const [songsData, setSongsData] = useState([]);
+  const [albumSummary, setAlbumSummary] = useState("");
 
   const url =
     "http://ws.audioscrobbler.com//2.0/?method=album.getinfo&api_key=" +
@@ -31,21 +32,25 @@ export default function AlbumScreen({ navigation, route }) {
     const response = await fetch(url);
     const json = await response.json();
 
-    console.log(json?.album?.tracks?.track);
+    setAlbumSummary(json.album.wiki.summary);
+
+    // console.log(json.album.wiki.published);
 
     json?.album?.tracks?.track?.forEach((doc) => {
-      // console.log(doc["@attr"]);
       let song = {
         songName: doc.name,
         duration: doc.duration,
         minutes: Math.floor(doc.duration / 60),
-        seconds: doc.duration - Math.floor(doc.duration / 60) * 60,
+        seconds: (
+          doc.duration -
+          Math.floor(doc.duration / 60) * 60
+        ).toLocaleString("en-US", {
+          minimumIntegerDigits: 2,
+          useGrouping: false,
+        }),
         rank: doc["@attr"].rank,
+        summary: doc.summary,
       };
-      // doc["@attr"].forEach((doc2) => {
-      //   song = { ...song, rank: doc2.rank };
-      // });
-      // console.log(song);
       songData.push(song);
     });
 
@@ -56,7 +61,6 @@ export default function AlbumScreen({ navigation, route }) {
   useEffect(() => {
     getSongInfo();
     // console.log(songsData);
-    // console.log("ran useeffect");
   }, []);
 
   return (
@@ -102,10 +106,12 @@ const styles = StyleSheet.create({
     flex: 3,
     justifyContent: "center",
     alignItems: "center",
+    marginVertical: 10,
   },
   albumImg: {
-    height: 150,
-    width: 150,
+    height: 200,
+    width: 200,
+    paddingVertical: 5,
   },
   container: {
     flex: 1,
@@ -115,12 +121,16 @@ const styles = StyleSheet.create({
   },
   leftSide: {
     flexDirection: "row",
+    width: "90%",
   },
   rightSide: {},
   songItem: {
     flexDirection: "row",
     justifyContent: "space-between",
     paddingHorizontal: 10,
+    marginVertical: 5,
+    borderBottomWidth: 1,
+    borderBottomColor: "#b3b3b3",
   },
   songList: {
     // alignItems: "center",
