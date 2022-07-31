@@ -21,7 +21,9 @@ export default function AlbumScreen({ navigation, route }) {
   const url =
     "http://ws.audioscrobbler.com//2.0/?method=album.getinfo&api_key=" +
     api_key +
-    "&artist=Dance+Gavin+Dance&album=" +
+    "&artist=" +
+    albumInfo.artistURL +
+    "&album=" +
     albumNameURL +
     "&format=json";
 
@@ -32,7 +34,7 @@ export default function AlbumScreen({ navigation, route }) {
     const response = await fetch(url);
     const json = await response.json();
 
-    setAlbumSummary(json.album.wiki.summary);
+    // setAlbumSummary(json.album.wiki.summary);
 
     // console.log(json.album.wiki.published);
 
@@ -84,12 +86,12 @@ export default function AlbumScreen({ navigation, route }) {
           renderItem={({ item }) => (
             <View style={styles.songItem}>
               <View style={styles.leftSide}>
-                <Text numberOfLines={1}>
+                <Text numberOfLines={1} style={{ fontSize: 20 }}>
                   {item.rank}. {item.songName}
                 </Text>
               </View>
               <View style={styles.rightSide}>
-                <Text>
+                <Text tyle={{ fontSize: 20 }}>
                   {item.minutes}:{item.seconds}
                 </Text>
               </View>

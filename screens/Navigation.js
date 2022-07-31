@@ -12,12 +12,19 @@ export default function Navigation() {
         screenOptions={
           {
             //   headerShown: false,
-            // gestureEnabled: false
+            //   gestureEnabled: false
           }
         }
         initialRouteName="Album List"
       >
-        <Stack.Screen name="Album List" component={MainScreen} />
+        <Stack.Screen
+          name="Album List"
+          component={MainScreen}
+          options={{
+            // title: "Metal"
+            headerShown: false,
+          }}
+        />
         <Stack.Screen name="Album" component={AlbumScreen} />
       </Stack.Navigator>
     </NavigationContainer>

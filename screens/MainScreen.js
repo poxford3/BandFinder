@@ -9,10 +9,12 @@ import {
   TouchableOpacity,
   Image,
 } from "react-native";
+import { Searchbar } from "react-native-paper";
 import { api_key, shared_secret_key } from "../assets/api_key";
 
 export default function MainScreen({ navigation }) {
   const [albums, setAlbums] = useState([]);
+  const [artist, setArtist] = useState("Dance Gavin Dance");
   const testList = [
     {
       name: "name1",
@@ -39,14 +41,18 @@ export default function MainScreen({ navigation }) {
 
   // const api_key = api_key;
   const rootURL = "http://ws.audioscrobbler.com/";
+  // const artist = "Dance Gavin Dance";
+  const artistURL = artist.replace(/ /g, "+");
   const url =
-    "https://ws.audioscrobbler.com/2.0/?method=artist.gettopalbums&artist=dance+gavin+dance&api_key=" +
+    "https://ws.audioscrobbler.com/2.0/?method=artist.gettopalbums&artist=" +
+    artistURL +
+    "&api_key=" +
     api_key +
     "&format=json";
 
   // console.log(url);
 
-  // help from lucktale#2736 in rn discord :)
+  // help from lucktale#2736 in RN discord :)
   const getAlbumInfo = async () => {
     let albumData = [];
     const response = await fetch(url);
@@ -80,6 +86,14 @@ export default function MainScreen({ navigation }) {
     <SafeAreaView style={styles.container}>
       <View style={styles.topView}>
         <StatusBar style="auto" />
+        <Text style={{ fontSize: 25 }}>{artist}</Text>
+        <View style={styles.searchCont}>
+          <Searchbar
+            style={styles.searchbar}
+            value={artist}
+            // onChangeText={(text) => setArtist(text)}
+          />
+        </View>
       </View>
       <View style={styles.listView}>
         {/* <Text>test</Text> */}
@@ -93,7 +107,9 @@ export default function MainScreen({ navigation }) {
                   navigation.navigate("Album", {
                     albumName: item.albumName,
                     imageURL: item.imageURL,
+                    artistURL: artistURL,
                   });
+                  // navigation.setOptions({ title: artist });
                 }}
               >
                 <Image
@@ -140,8 +156,18 @@ const styles = StyleSheet.create({
     // justifyContent: "space-between",
     alignItems: "space-between",
   },
+  searchbar: {
+    marginVertical: 5,
+  },
+  searchCont: {
+    width: "90%",
+    marginVertical: 5,
+  },
   topView: {
     justifyContent: "center",
     alignItems: "center",
+    borderBottomColor: "#000",
+    borderBottomWidth: 2,
+    // height: 40,
   },
 });
