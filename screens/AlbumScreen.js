@@ -83,6 +83,7 @@ export default function AlbumScreen({ navigation, route }) {
       <View style={styles.songList}>
         <FlatList
           data={songsData}
+          initialNumToRender={20}
           renderItem={({ item }) => (
             <View style={styles.songItem}>
               <View style={styles.leftSide}>

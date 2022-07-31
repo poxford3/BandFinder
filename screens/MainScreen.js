@@ -50,7 +50,7 @@ export default function MainScreen({ navigation }) {
     api_key +
     "&format=json";
 
-  // console.log(url);
+  console.log(url);
 
   // help from lucktale#2736 in RN discord :)
   const getAlbumInfo = async () => {
@@ -87,19 +87,20 @@ export default function MainScreen({ navigation }) {
       <View style={styles.topView}>
         <StatusBar style="auto" />
         <Text style={{ fontSize: 25 }}>{artist}</Text>
-        <View style={styles.searchCont}>
+        {/* <View style={styles.searchCont}>
           <Searchbar
             style={styles.searchbar}
             value={artist}
             // onChangeText={(text) => setArtist(text)}
           />
-        </View>
+        </View> */}
       </View>
       <View style={styles.listView}>
         {/* <Text>test</Text> */}
         <FlatList
           data={albums}
           numColumns={2}
+          initialNumToRender={20}
           renderItem={({ item }) => (
             <View style={styles.albumItem}>
               <TouchableOpacity
