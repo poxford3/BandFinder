@@ -3,6 +3,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 import MainScreen from "./MainScreen";
 import AlbumScreen from "./AlbumScreen";
+import SearchScreen from "./SearchScreen";
 
 const Stack = createNativeStackNavigator();
 export default function Navigation() {
@@ -15,17 +16,19 @@ export default function Navigation() {
             //   gestureEnabled: false
           }
         }
-        initialRouteName="Album List"
+        initialRouteName="Search"
       >
         <Stack.Screen
           name="Album List"
           component={MainScreen}
-          options={{
-            // title: "Metal"
-            headerShown: false,
-          }}
+          options={{ headerShown: false }}
         />
         <Stack.Screen name="Album" component={AlbumScreen} />
+        <Stack.Screen
+          name="Search"
+          component={SearchScreen}
+          options={{ headerShown: false }}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

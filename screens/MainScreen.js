@@ -12,7 +12,7 @@ import {
 import { Searchbar } from "react-native-paper";
 import { api_key, shared_secret_key } from "../assets/api_key";
 
-export default function MainScreen({ navigation }) {
+export default function MainScreen({ navigation, route }) {
   const [albums, setAlbums] = useState([]);
   const [artist, setArtist] = useState("Dance Gavin Dance");
   const testList = [
