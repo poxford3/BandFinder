@@ -78,7 +78,7 @@ export default function AlbumScreen({ navigation, route }) {
           }}
           style={styles.albumImg}
         />
-        <Text style={styles.headerText}>{albumName}</Text>
+        {/* <Text style={styles.headerText}>{albumName}</Text> */}
       </View>
       <View style={styles.songList}>
         <FlatList
