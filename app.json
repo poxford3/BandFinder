@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "dgd_info",
-    "slug": "dgd_info",
+    "name": "BandFinder",
+    "slug": "BandFinder",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
