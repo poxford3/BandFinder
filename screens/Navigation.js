@@ -4,7 +4,6 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import MainScreen from "./MainScreen";
 import AlbumScreen from "./AlbumScreen";
 import SearchScreen from "./SearchScreen";
-import PokemonList from "./PokemonList";
 
 const Stack = createNativeStackNavigator();
 export default function Navigation() {
@@ -32,11 +31,6 @@ export default function Navigation() {
         <Stack.Screen
           name="Search"
           component={SearchScreen}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="Pokemon"
-          component={PokemonList}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>

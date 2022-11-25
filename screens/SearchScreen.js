@@ -89,14 +89,6 @@ export default function SearchScreen({ navigation }) {
         >
           <Text style={{ fontSize: 24 }}>Search</Text>
         </TouchableOpacity>
-        {/* <View style={styles.pokemon}>
-          <TouchableOpacity
-            style={styles.pokeButton}
-            onPress={navigation.navigate("Pokemon")}
-          >
-            <Text>To the other list</Text>
-          </TouchableOpacity>
-        </View> */}
       </View>
     </SafeAreaView>
   );
@@ -120,19 +112,6 @@ const styles = StyleSheet.create({
     borderRadius: 1,
     borderColor: "black",
     marginTop: 20,
-  },
-  pokeButton: {
-    height: 40,
-    width: 200,
-    backgroundColor: "lightgray",
-    justifyContent: "center",
-    alignItems: "center",
-    borderRadius: 10,
-    borderColor: "black",
-    borderWidth: 1,
-  },
-  pokemon: {
-    marginTop: 50,
   },
   searchBarCont: {
     width: "90%",
